@@ -2,12 +2,14 @@ package com.example.demo.note;
 
 
 import com.example.demo.user.User;
+import lombok.Data;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
+@Data
 @Table(name = "notes")
 public class Note {
     @Id
