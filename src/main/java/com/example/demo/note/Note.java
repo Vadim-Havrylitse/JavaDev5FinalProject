@@ -2,15 +2,19 @@ package com.example.demo.note;
 
 
 import com.example.demo.user.User;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Data
 @Table(name = "notes")
+@Getter
+@Setter
+@Builder
 public class Note {
     @Id
     @GeneratedValue(generator = "UUID")
