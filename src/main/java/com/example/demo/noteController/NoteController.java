@@ -25,7 +25,7 @@ public class NoteController {
         return modelAndView;
     }
 
-    @PostMapping("/add")
+    @PostMapping("/create")
     public void addNote(@RequestParam Map<String,String> map, HttpServletResponse resp){
         noteService.createNote(map,resp);
     }
@@ -35,7 +35,7 @@ public class NoteController {
         noteService.deleteById(map,resp);
     }
 
-    @PostMapping("/change")
+    @PostMapping("/edit")
     public void changeNote(@RequestParam Map<String,String> map, HttpServletResponse resp){
         noteService.update(map,resp);
     }

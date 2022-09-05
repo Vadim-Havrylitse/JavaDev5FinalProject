@@ -2,9 +2,7 @@ package com.example.demo.note;
 
 
 import com.example.demo.user.User;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -14,6 +12,8 @@ import java.util.UUID;
 @Table(name = "notes")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Note {
     @Id
