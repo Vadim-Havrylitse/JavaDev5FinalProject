@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.note.Note;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -12,35 +13,6 @@ import java.util.List;
 
 @Controller
 public class TextController {
-
-    public static void main(String[] args) {
-        String text = "<h3>TEST Text</h3>\n" +
-                "<ul>\n" +
-                "<li>test</li>\n" +
-                "<li>test</li>\n" +
-                "</ul>";
-        String text2 = "### TEST Text\n" +
-                "* test\n" +
-                "* test";
-        System.out.println("toHTML(text2) = " + convertMarkdownToHTML(text2));
-
-        String s = text.replaceAll("n", "<br>");
-        System.out.println(s);
-    }
-
-    public static String convertMarkdownToHTML(String content) {
-        List<org.commonmark.Extension> extensions = new ArrayList<>();
-        extensions.add(TablesExtension.create());
-        extensions.add(org.commonmark.ext.gfm.strikethrough.StrikethroughExtension.create());
-        extensions.add(org.commonmark.ext.autolink.AutolinkExtension.create());
-        Parser parser = Parser.builder()
-                .build();
-        HtmlRenderer renderer = HtmlRenderer.builder()
-                .softbreak("<br>")
-                .build();
-        Node document = parser.parse(content == null ? "" : content);
-        return renderer.render(document);
-    }
 
     @GetMapping("/")
     public String setText(Model model){
@@ -95,11 +67,13 @@ public class TextController {
                 "\n" +
                 "## Tables\n" +
                 "\n" +
+                "~~~\n" +
                 "| Left columns  | Right columns |\n" +
                 "| ------------- |:-------------:|\n" +
                 "| left foo      | right foo     |\n" +
                 "| left bar      | right bar     |\n" +
                 "| left baz      | right baz     |\n" +
+                "~~~\n" +
                 "\n" +
                 "## Blocks of code\n" +
                 "\n" +
@@ -111,8 +85,22 @@ public class TextController {
                 "## Inline code\n" +
                 "\n" +
                 "This web site is using `markedjs/marked`.";
-        String result = convertMarkdownToHTML(text);
-        model.addAttribute("text", result);
+        Note note = Note.builder()
+                .content(convertMarkdownToHTML(text))
+                .name("NOTE NAME")
+                .build();
+        model.addAttribute("note", note);
         return "note_read";
+    }
+
+    private String convertMarkdownToHTML(String content) {
+        List<org.commonmark.Extension> extensions = new ArrayList<>();
+        Parser parser = Parser.builder()
+                .build();
+        HtmlRenderer renderer = HtmlRenderer.builder()
+                .softbreak("<br>")
+                .build();
+        Node document = parser.parse(content == null ? "" : content);
+        return renderer.render(document);
     }
 }
