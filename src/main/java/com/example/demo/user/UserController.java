@@ -1,6 +1,7 @@
 package com.example.demo.user;
 
 import com.example.demo.exception.ImpossibleActionException;
+import com.example.demo.validator.UserDataValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
+    private final UserDataValidator userDataValidator;
 
     @GetMapping("/register")
     public String registration(Model model) {
@@ -28,20 +30,30 @@ public class UserController {
         return "register";
     }
 
+//    @PostMapping("/register")
+//    public String registrationUser(@Valid User user, BindingResult result) {
+//        try {
+//            if (result.hasErrors()) return "register";
+//            userService.create(user);
+//            return "redirect:/login";
+//        } catch (ImpossibleActionException e) {
+//            log.error("User with this username already exist");
+//            //return reg url
+//            return "register";
+//        }
+//    }
+
+
     @PostMapping("/register")
-    public String registrationUser(@Valid User user, BindingResult result) {
-        try {
-            if (result.hasErrors()) return "register";
-            userService.create(user);
-            return "redirect:/login";
-        } catch (ImpossibleActionException e) {
-            log.error("User with this username already exist");
-            //return reg url
+    public String registrationUser(@ModelAttribute("user") User user, BindingResult result){
+        userDataValidator.validate(user,result);
+
+        if(result.hasErrors()){
             return "register";
         }
+        userService.create(user);
+        return "redirect:/login";
     }
-
-
 
     @ModelAttribute("user")
     public User defaultUser() {
