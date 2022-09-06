@@ -1,7 +1,9 @@
 package com.example.demo.noteController;
 
+import com.example.demo.auth.CustomUserDetails;
 import com.example.demo.note.NoteService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,8 +28,14 @@ public class NoteController {
     }
 
     @PostMapping("/create")
-    public void addNote(@RequestParam Map<String,String> map, HttpServletResponse resp){
+    public void addNote(@RequestParam Map<String,String> map, HttpServletResponse resp, Authentication authentication){
+        map.put("userId", ((CustomUserDetails)authentication.getPrincipal()).getId().toString());
         noteService.createNote(map,resp);
+    }
+
+    @GetMapping("/create")
+    public String addNote(@RequestParam Map<String,String> map, HttpServletResponse resp){
+        return "note_create";
     }
 
     @PostMapping("/delete")

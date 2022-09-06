@@ -41,6 +41,7 @@
 <br>
 <div class="container-sm" style="width:60%;">
     <form method="post" action="/note/edit">
+        <input type="hidden" th:value="${note.id}}" name="id">
         <div class="form-control" style="font-family:verdana; background-color:LightGray;">
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Note's name:</label>
