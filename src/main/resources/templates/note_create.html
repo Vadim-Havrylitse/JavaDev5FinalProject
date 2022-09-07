@@ -7,8 +7,25 @@
     <title>Create Note</title>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <script type="text/javascript">
+<!--
+var count=10000;
+function load1()
+{
+document.Form.t.value=count-document.Form.content.value.length;
+}
+function counter()
+{
+a=document.Form.content.value.length;
+if((a)>count)document.formText.text1.value=document.Form.content.value.substring(0,count);
+a=document.Form.content.value.length;
+document.Form.t.value=count-a;
+}
+//-->
+</script>
 </head>
-<body style="background-color:powderblue">
+
+<body style="background-color:powderblue" onload=load1()>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-xxl">
         <a class="navbar-brand" href="/">MAIN PAGE</a>
@@ -40,32 +57,61 @@
 </nav>
 <br>
 <div class="container-sm" style="width:60%;">
-    <form method="post" action="/note/create">
+    <form method="post" action="/note/create" name="Form">
         <div class="form-control" style="font-family:verdana; background-color:LightGray;">
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Note's name:</label>
-                <input class="form-control form-control-lg" type="text" name="name" id="exampleFormControlTextarea1">
+                <input class="form-control form-control-lg"
+                       type="text"
+                       name="name"
+                       id="exampleFormControlTextarea1"
+                       minlength="5"
+                       maxlength="100"
+                       required="required">
             </div>
             <div class="mb-3">
                 <label for="exampleFormControlTextarea2" class="form-label">Note's content:</label>
-                <textarea class="form-control" name="content" id="exampleFormControlTextarea2" rows="10"></textarea>
+                <textarea class="form-control"
+                          name="content"
+                          id="exampleFormControlTextarea2"
+                          onkeyup="counter()"
+                          rows="20"
+                          minlength="5"
+                          maxlength="10000"
+                          required="required"></textarea>
+                Character limit:
+                <input type="text" id="t"  size="4" maxlength="4" disabled>
+                <br>
             </div>
 
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" id="radio1" name="access" value="PUBLIC" checked aria-selected="true">
+                <input class="form-check-input"
+                       type="radio"
+                       id="radio1"
+                       name="access"
+                       value="PUBLIC"
+                       aria-selected="true"
+                       checked>
                 <label class="form-check-label" for="radio1">Public</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" id="radio2" name="access" value="PRIVATE" aria-selected="true">
+                <input class="form-check-input"
+                       type="radio" id="radio2"
+                       name="access"
+                       value="PRIVATE"
+                       aria-selected="true">
                 <label class="form-check-label" for="radio2">Private</label>
             </div>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button class="btn btn-secondary me-md-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                <button class="btn btn-secondary me-md-2"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseExample"
+                        aria-expanded="false"
+                        aria-controls="collapseExample">
                     Markdown guide
                 </button>
-
                 <button class="btn btn-success me-md-2" type="submit">Create</button>
-
                 <button class="btn btn-success me-md-2" type="button" onclick="history.back()">Go back</button>
             </div>
             <br>
