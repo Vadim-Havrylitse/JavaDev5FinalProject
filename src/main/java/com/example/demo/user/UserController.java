@@ -17,7 +17,7 @@ import javax.validation.Valid;
 @Slf4j
 @RequiredArgsConstructor
 @Controller
-@RequestMapping(path = "/user")
+@RequestMapping(path = "/users")
 public class UserController {
 
     private final UserService userService;
@@ -51,7 +51,8 @@ public class UserController {
         if(result.hasErrors()){
             return "register";
         }
-        userService.create(user);
+        User user1 = userService.create(user);
+        System.out.println("Create user success: " + user1.toString());
         return "redirect:/login";
     }
 

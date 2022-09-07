@@ -46,7 +46,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/register", "/login").permitAll()
+                .antMatchers("/users/register", "/h2/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -57,6 +57,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logout()
                    .logoutSuccessUrl("/login?logout")
                    .permitAll();
+        http.csrf().disable();
     }
 
 }

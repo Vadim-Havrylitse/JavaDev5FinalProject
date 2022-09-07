@@ -22,12 +22,13 @@ public class UserDataValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         User user = (User) o;
-
+        System.out.println("o.toString() = " + o.toString());
+        System.out.println("user.toString() = " + user.toString());
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
-        if (user.getUserName().length() < 5 || user.getUserName().length() > 50) {
+        if (user.getUsername().length() < 5 || user.getUsername().length() > 50) {
             errors.rejectValue("username", "Size.userForm.username");
         }
-        if (userService.getByUsername(user.getUserName()) != null) {
+        if (userService.getByUsername(user.getUsername()) != null) {
             errors.rejectValue("username", "Duplicate.userForm.username");
         }
 
