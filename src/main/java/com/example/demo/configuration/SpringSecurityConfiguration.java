@@ -42,23 +42,44 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider());
     }
 
+//    @SneakyThrows
+//    @Autowired
+//    public void configureGlobal(BCryptPasswordEncoder passwordEncoder,
+//                                UserDetailsService userDetailsService, AuthenticationManagerBuilder auth) {
+//
+//        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+//
+//    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.authorizeRequests()
-                .antMatchers("/users/register", "/h2/**").permitAll()
-                .anyRequest().authenticated()
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/register", "/login").permitAll()
+                .antMatchers("/note/list", "/note/create", "/note/edit").authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .formLogin()
-                  .loginPage("/login")
+                  //.loginPage("/login")
                   .defaultSuccessUrl("/note/list")
                   .permitAll()
                 .and()
-                .logout()
-                   .logoutSuccessUrl("/login?logout")
-                   .permitAll();
-        http.csrf().disable();
-        http.headers().frameOptions().disable();
+                .logout().logoutSuccessUrl("/").permitAll();
+
+//        http.csrf().disable();
+//        http.authorizeRequests().antMatchers("/noteUser/listUsers").access("hasRole('ROLE_ADMIN')");
+//
+//
+//        http.authorizeRequests()
+//                .antMatchers("/user/register").permitAll()
+//                .antMatchers("/login").permitAll();
+
+
+
+
+
     }
 
 }

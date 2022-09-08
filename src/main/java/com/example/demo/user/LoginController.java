@@ -12,16 +12,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/")
 public class LoginController {
 
-    @GetMapping("/login")
-    public String login(Model model, String error, String logout) {
-        if (error != null) {
-            model.addAttribute("error", "Your username or password is invalid");
-        }
 
-        if (logout != null) {
-            model.addAttribute("message", "You have been logged out");
-        }
-        log.info("I'm rendering the \"login\" page");
+    @GetMapping("/")
+    public Object greeting() {
+        return "redirect:/login";
+    }
+
+    @GetMapping("/login")
+    public String login(@RequestParam(name = "error", required = false, defaultValue = "false") Boolean error,
+                        @RequestParam(name = "logout", required = false, defaultValue = "false") String logout,
+                        Model model) {
+        log.info("LOGIN GET");
+
+        model.addAttribute("title", "Login");
+        model.addAttribute("message", "To start using login or create an account");
+        model.addAttribute("error", error);
+
+        if (error != null) log.info("You login or password not corrected, check it and try again");
+        if (logout != null) log.info("You have been logged out");
+        //return login url
+
         return "login";
     }
 }
