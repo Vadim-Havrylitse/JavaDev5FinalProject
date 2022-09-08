@@ -8,31 +8,38 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 </head>
-<body style="padding-left: 15px;padding-right: 20px;);
-background-size: cover;font-family: 'Comic Sans MS', arial, serif;">
+<body>
 <div class="container">
+    <div class="login-register-form">
+        <form method="POST" class="form-signin" action="login">
+            <h2 class="form-heading">Log in</h2>
 
-    <form action="/login" method="POST">
-        <h2 style="text-align: center; margin-top: 50px"><span  th:utext="${message}"></span></h2>
-        <div class="card-body" style="text-align: center">
-            <div>
-                <input type="text" class="form-control form-control-sm" name="username" placeholder="Enter your username"
-                       th:required="required"  style=" max-width: 300px; padding: 10px; margin: 0 auto">
+            <div th:form="${error != null ? 'has-error' : ''}">
+                <span class="ui-state-error-text" style="color:red" th:text="${message}"></span>
+
+                <div class="form-group">
+                    <label for="username" class="form-label mt-4">Username</label>
+                    <input required type="text" class="form-control" id="username" name="username" aria-describedby="emailHelp"
+                           placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label for="password" class="form-label mt-4">Password</label>
+                    <input required type="password" class="form-control" id="password" name="password" placeholder="Password">
+                </div>
+
+                <span class="ui-state-error-text" style="color:red" th:text="${error}"></span>
+
+                <div class="form-label mt-4">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-lg btn-primary" type="submit">LOG IN</button>
+                    </div>
+                </div>
+                <h5 class="text-center"><a href="/users/register">Create an
+                    account</a>
+                </h5>
             </div>
-            <div class="pt-3" style="text-align: center">
-
-                <input class="form-control form-control-sm" type="password" name="password" placeholder="Enter your password"
-                       th:required="required"   style=" max-width: 300px; padding: 10px; margin: auto"/>
-            </div>
-
-            <button class="btn btn-lg btn-primary" type="submit" style="margin-top: 15px">LOG IN</button>
-        </div>
-        <h5 class="text-center"><a th:href="@{/users/register}" class="btn btn-lg btn-primary">Create account</a>
-           <br>
-            <td style="background-color: #e1e1e194; width: 80%;"
-                th:text="${error} ? 'Wrong login or password. Please, try again.' : ''"></td>
-        </h5>
-    </form>
+        </form>
+    </div>
 </div>
 </body>
 </html>
