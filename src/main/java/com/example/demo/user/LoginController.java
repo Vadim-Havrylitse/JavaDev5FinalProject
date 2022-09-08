@@ -12,12 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/")
 public class LoginController {
 
-
-    @GetMapping("/")
-    public Object greeting() {
-        return "redirect:/login";
-    }
-
     @GetMapping("/login")
     public String login(@RequestParam(name = "error", required = false, defaultValue = "false") Boolean error,
                         @RequestParam(name = "logout", required = false, defaultValue = "false") String logout,
