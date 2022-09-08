@@ -1,6 +1,5 @@
 package com.example.demo.user;
 
-import com.example.demo.exception.ImpossibleActionException;
 import com.example.demo.validator.UserDataValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.validation.Valid;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,19 +26,6 @@ public class UserController {
         model.addAttribute("message", "Register for using note service");
         return "register";
     }
-
-//    @PostMapping("/register")
-//    public String registrationUser(@Valid User user, BindingResult result) {
-//        try {
-//            if (result.hasErrors()) return "register";
-//            userService.create(user);
-//            return "redirect:/login";
-//        } catch (ImpossibleActionException e) {
-//            log.error("User with this username already exist");
-//            //return reg url
-//            return "register";
-//        }
-//    }
 
 
     @PostMapping("/register")
