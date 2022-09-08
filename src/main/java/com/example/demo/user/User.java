@@ -4,6 +4,7 @@ package com.example.demo.user;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class User {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -22,7 +24,7 @@ public class User {
     private UUID id;
 
     @Column(name = "user_name", nullable = false, unique = true)
-    private String userName;
+    private String username;
 
     @Column(name = "password")
     private String password;
