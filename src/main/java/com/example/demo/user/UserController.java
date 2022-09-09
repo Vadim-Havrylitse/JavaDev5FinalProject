@@ -39,10 +39,14 @@ public class UserController {
 
         String error;
         if(result.hasErrors()){
-            if(result.hasFieldErrors("username")) {
-                error = "Someone already has that username";
-                model.addAttribute("error", error);
-            }
+//            if(result.hasFieldErrors("username")) {
+//                error = "Someone already has that username";
+//                model.addAttribute("error", error);
+//            }
+            result.getAllErrors().forEach(System.out::println);
+            String massage = result.getAllErrors().stream().findFirst().get().getDefaultMessage();
+
+            model.addAttribute("error", massage);
             return "register";
         }
         User user1 = userService.create(user);
