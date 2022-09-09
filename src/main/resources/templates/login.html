@@ -3,39 +3,39 @@
       xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title th:utext="${title}"></title>
+    <title>LOG IN</title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 </head>
-<body>
+<body style="padding-left: 15px;padding-right: 20px; margin-top: 50px;);
+background-size: cover;font-family: 'Comic Sans MS', arial, serif; text-align: center">
 <div class="container">
     <div class="login-register-form">
         <form method="POST" class="form-signin" action="login">
-            <h2 class="form-heading">Log in</h2>
+            <h2 class="form-heading">Please, log in</h2>
 
             <div th:form="${error != null ? 'has-error' : ''}">
                 <span class="ui-state-error-text" style="color:red" th:text="${message}"></span>
-
+                <span class="ui-state-error-text" style="color:red" th:text="${error}"></span>
                 <div class="form-group">
                     <label for="username" class="form-label mt-4">Username</label>
                     <input required type="text" class="form-control" id="username" name="username" aria-describedby="emailHelp"
-                           placeholder="Enter username">
+                           placeholder="Enter username"
+                           style=" max-width: 300px; padding: 10px; margin: 0 auto">
                 </div>
                 <div class="form-group">
                     <label for="password" class="form-label mt-4">Password</label>
-                    <input required type="password" class="form-control" id="password" name="password" placeholder="Password">
+                    <input required type="password" class="form-control" id="password" name="password" placeholder="Password"
+                           style=" max-width: 300px; padding: 10px; margin: 0 auto">
                 </div>
-
-                <span class="ui-state-error-text" style="color:red" th:text="${error}"></span>
-
                 <div class="form-label mt-4">
                     <div class="d-grid gap-2">
                         <button class="btn btn-lg btn-primary" type="submit">LOG IN</button>
                     </div>
                 </div>
-                <h5 class="text-center"><a href="/users/register">Create an
-                    account</a>
+                <br>
+                <h5 class="text-center"><a href="/users/register">Create an account</a>
                 </h5>
             </div>
         </form>

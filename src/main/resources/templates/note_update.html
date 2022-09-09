@@ -34,10 +34,10 @@ document.form.t.value=count-a;
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">ALL NOTES</a>
+                    <a class="nav-link" href="/note/list">ALL NOTES</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/">POINT</a>
+                    <a class="nav-link" href="/note/create">CREATE NOTE</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link"></a>
@@ -58,6 +58,7 @@ document.form.t.value=count-a;
 <div class="container-sm" style="width:60%;">
     <form method="post" action="/note/edit" name="form">
         <div class="form-control" style="font-family:verdana; background-color:LightGray;">
+            <input type="hidden" th:value="${note.id}" name="id">
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Note's name:</label>
                 <input class="form-control form-control-lg"
@@ -121,6 +122,8 @@ document.form.t.value=count-a;
                         <b>1</b> Item with number<br>
                         <br>
                         <b>[</b>Link title<b>]</b><b>(</b>https://url<b>)</b><br>
+                        <br>
+                        <b>---</b> Cross-large line
                         <br>
                         <b>```</b>Inline highlight text<b>```</b><br>
                         <br>
