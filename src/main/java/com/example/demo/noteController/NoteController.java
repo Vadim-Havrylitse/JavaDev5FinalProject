@@ -1,6 +1,7 @@
 package com.example.demo.noteController;
 
 import com.example.demo.auth.CustomUserDetails;
+import com.example.demo.note.Note;
 import com.example.demo.note.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -67,7 +68,8 @@ public class NoteController {
     public ModelAndView getShareNote(HttpServletRequest req){
         ModelAndView modelAndView = new ModelAndView("note_read");
         String[] split = req.getRequestURI().split("/");
-        modelAndView.addObject("note",noteService.getNoteById(UUID.fromString(split[3])));
+        Note note = noteService.parseNoteContentToHtml(noteService.getNoteById(UUID.fromString(split[3])));
+        modelAndView.addObject("note", note);
         return modelAndView;
     }
 }
