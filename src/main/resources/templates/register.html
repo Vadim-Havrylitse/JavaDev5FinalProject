@@ -14,11 +14,13 @@ background-size: cover;font-family: 'Comic Sans MS', arial, serif;">
     <form action="/users/register" method="POST">
         <h3 style="text-align: center; margin-top: 50px"><span th:utext="${message}"></span></h3>
 
+        <div class="alert alert-danger" style="text-align: center" th:if="${error}" th:text="${error}"></div>
         <div class="card-body" style="text-align: center">
-            <input type="text" class="form-control form-control-sm" name="username"  placeholder="Enter your username"
+            <input type="text" class="form-control form-control-sm" name="username" placeholder="Enter your username"
                    th:required="required" th:autofocus="true" minlength="5" maxlength="50"
                    style=" max-width: 300px; padding: 10px; margin: 0 auto;">
         </div>
+
 
         <div class="pt-3" style="text-align: center">
             <input class="form-control form-control-sm" type="password" name="password" placeholder="Enter your password" th:autofocus="false"

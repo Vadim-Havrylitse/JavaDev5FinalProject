@@ -26,15 +26,15 @@ public class UserDataValidator implements Validator {
         System.out.println("user.toString() = " + user.toString());
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
         if (user.getUsername().length() < 5 || user.getUsername().length() > 50) {
-            errors.rejectValue("username", "Size.userForm.username");
+            errors.rejectValue("username", "Size.user.username");
         }
         if (userService.getByUsername(user.getUsername()) != null) {
-            errors.rejectValue("username", "Duplicate.userForm.username");
+            errors.rejectValue("username", "Duplicate.user.username");
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
         if (user.getPassword().length() < 8 || user.getPassword().length() > 100) {
-            errors.rejectValue("password", "Size.userForm.password");
+            errors.rejectValue("password", "Size.user.password");
         }
     }
 }
