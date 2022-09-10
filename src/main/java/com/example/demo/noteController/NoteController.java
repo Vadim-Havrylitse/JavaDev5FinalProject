@@ -1,6 +1,7 @@
 package com.example.demo.noteController;
 
 import com.example.demo.auth.CustomUserDetails;
+import com.example.demo.note.Note;
 import com.example.demo.note.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
