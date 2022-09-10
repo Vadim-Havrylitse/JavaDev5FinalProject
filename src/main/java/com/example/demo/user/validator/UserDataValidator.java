@@ -1,7 +1,7 @@
-package com.example.demo.validator;
+package com.example.demo.user.validator;
 
-import com.example.demo.user.User;
-import com.example.demo.user.UserService;
+import com.example.demo.user.entity.User;
+import com.example.demo.user.dto.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;

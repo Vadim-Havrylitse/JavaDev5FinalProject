@@ -1,27 +1,24 @@
-package com.example.demo.user;
+package com.example.demo.user.dto;
 
-import lombok.RequiredArgsConstructor;
+import com.example.demo.user.entity.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
-public class UserService {
+public record UserService(UserRepository userRepository) {
 
-    private final UserRepository userRepository;
-
-    public User create(User user){
+    public User create(User user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         return userRepository.save(user);
     }
 
-    public User getByUsername(String username){
+    public User getByUsername(String username) {
         return userRepository.findUserByUsername(username);
     }
 
-    public User getById(UUID uuid){
+    public User getById(UUID uuid) {
         return userRepository.findById(uuid).get();
     }
 }

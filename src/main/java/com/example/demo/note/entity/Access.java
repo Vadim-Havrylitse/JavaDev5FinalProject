@@ -1,4 +1,4 @@
-package com.example.demo.note;
+package com.example.demo.note.entity;
 
 import lombok.Getter;
 
