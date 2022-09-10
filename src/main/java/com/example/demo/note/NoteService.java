@@ -7,6 +7,7 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -75,7 +76,7 @@ public class NoteService {
         noteRepository.deleteById(UUID.fromString(id));
 
         try {
-            resp.sendRedirect("/note");
+            resp.sendRedirect("/note/list");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -119,7 +120,31 @@ public class NoteService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    public ModelAndView getSharePage(HttpServletRequest req,HttpServletResponse resp){
+        String[] split = req.getRequestURI().split("/");
+        String id = split[3];
+        try {
+            Note noteById = noteRepository.findNoteById(UUID.fromString(id));
+
+            if (noteById.getAccess().equals(Access.PRIVATE)){
+                resp.sendRedirect("/note/share/error");
+            }else {
+                ModelAndView modelAndView = new ModelAndView("note_read");
+                modelAndView.addObject("note",noteById);
+                return modelAndView;
+            }
+
+
+        } catch (Exception e){
+            try {
+                resp.sendRedirect("/note/share/error");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return new ModelAndView("share_error");
     }
 
 }

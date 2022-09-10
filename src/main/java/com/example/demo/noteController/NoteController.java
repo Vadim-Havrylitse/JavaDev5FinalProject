@@ -64,12 +64,14 @@ public class NoteController {
         noteService.copyLink(map,req,resp);
     }
 
-    @GetMapping("/share/*")
-    public ModelAndView getShareNote(HttpServletRequest req){
-        ModelAndView modelAndView = new ModelAndView("note_read");
-        String[] split = req.getRequestURI().split("/");
-        Note note = noteService.parseNoteContentToHtml(noteService.getNoteById(UUID.fromString(split[3])));
-        modelAndView.addObject("note", note);
+    @GetMapping("/share/error")
+    public ModelAndView getShareError(){
+        ModelAndView modelAndView = new ModelAndView("share_error");
         return modelAndView;
+    }
+
+    @GetMapping("/share/*")
+    public ModelAndView getShareNote(HttpServletRequest req, HttpServletResponse resp){
+        return noteService.getSharePage(req,resp);
     }
 }
