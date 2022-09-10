@@ -1,5 +1,6 @@
-package com.example.demo.user;
+package com.example.demo.user.dto;
 
+import com.example.demo.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

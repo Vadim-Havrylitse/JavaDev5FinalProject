@@ -1,29 +1,24 @@
 package com.example.demo.user;
 
-import com.example.demo.validator.UserDataValidator;
-import lombok.RequiredArgsConstructor;
+import com.example.demo.user.dto.UserService;
+import com.example.demo.user.entity.User;
+import com.example.demo.user.validator.UserDataValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.List;
 
 @Slf4j
-@RequiredArgsConstructor
 @Controller
 @RequestMapping(path = "/users")
-public class UserController {
-
-    private final UserService userService;
-    private final UserDataValidator userDataValidator;
+public record UserController(UserService userService,
+                             UserDataValidator userDataValidator) {
 
     @GetMapping("/register")
     public String registration(Model model) {
@@ -34,11 +29,11 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public String registrationUser(@Valid @ModelAttribute("user") User user, BindingResult result, Model model){
-        userDataValidator.validate(user,result);
+    public String registrationUser(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
+        userDataValidator.validate(user, result);
 
         String error;
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
 //            if(result.hasFieldErrors("username")) {
 //                error = "Someone already has that username";
 //                model.addAttribute("error", error);

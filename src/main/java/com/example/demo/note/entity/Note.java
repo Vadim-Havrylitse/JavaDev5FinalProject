@@ -1,7 +1,7 @@
-package com.example.demo.note;
+package com.example.demo.note.entity;
 
 
-import com.example.demo.user.User;
+import com.example.demo.user.entity.User;
 import lombok.*;
 import org.hibernate.annotations.Type;
 

@@ -1,5 +1,6 @@
-package com.example.demo.note;
+package com.example.demo.note.dto;
 
+import com.example.demo.note.entity.Note;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
