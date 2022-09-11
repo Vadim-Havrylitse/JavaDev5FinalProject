@@ -17,16 +17,14 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.io.IOException;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public record NoteService(NoteRepository noteRepository,
                           UserRepository userRepository) {
 
-    public void createNote(Map<String, String> map, HttpServletResponse resp) {
+    public void createNote(Map<String, String> map) throws Exception {
         String name = map.get("name");
         String content = map.get("content");
         Access access = Access.valueOf(map.get("access"));
@@ -40,13 +38,11 @@ public record NoteService(NoteRepository noteRepository,
         note.setAccess(access);
         note.setUserId(user.get());
 
-        noteRepository.save(note);
-
-        try {
-            resp.sendRedirect("/note/list");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!isValidNotes(note)){
+            throw new Exception("Wrong format of name or content in Note!");
         }
+
+        noteRepository.save(note);
     }
 
     public void update(Map<String, String> map, HttpServletResponse resp) {
@@ -138,6 +134,14 @@ public record NoteService(NoteRepository noteRepository,
             }
         }
         return new ModelAndView("share_error");
+    }
+
+    public boolean isValidNotes(Note note){
+        boolean content1 = note.getContent().length() >= 5;
+        boolean content2 = note.getContent().length() <= 10000;
+        boolean name1 = note.getName().length() >= 5;
+        boolean name2 = note.getName().length() <= 100;
+        return content1 && content2 && name1 && name2;
     }
 
 }

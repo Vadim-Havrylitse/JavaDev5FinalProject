@@ -6,6 +6,7 @@ import com.example.demo.note.entity.Note;
 import com.example.demo.user.entity.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,10 +32,18 @@ public record NoteController(NoteService noteService) {
     }
 
     @PostMapping("/create")
-    public void addNote(@RequestParam Map<String, String> map, HttpServletResponse resp, Authentication authentication) {
+    public String addNote(@RequestParam Map<String, String> map, Model model, Authentication authentication) {
         UUID activeUserId = getUserFromAuthentication(authentication).getId();
         map.put("userId", String.valueOf(activeUserId));
-        noteService.createNote(map, resp);
+        try {
+            noteService.createNote(map);
+            return "redirect:/note/list";
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("message", "Note`s <b>NAME</b> mast have size between 5 and 100 character " +
+                    "and <b>CONTENT</b> size — between 5 and 10000 character!");
+            return "any_error";
+        }
     }
 
     @GetMapping("/create")
