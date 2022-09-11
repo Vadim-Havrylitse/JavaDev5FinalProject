@@ -84,8 +84,8 @@ public record NoteService(NoteRepository noteRepository,
         return noteRepository.findNoteById(id);
     }
 
-    public List<Note> getAllNote(UUID userId) {
-        return noteRepository.getNotesByUserId(userId);
+    public List<Note> getAllUsersNote(User user) {
+        return noteRepository.findByUserIdIs(user);
     }
 
     public Note parseNoteContentToHtml(Note note) {
@@ -125,7 +125,7 @@ public record NoteService(NoteRepository noteRepository,
                 resp.sendRedirect("/note/share/error");
             } else {
                 ModelAndView modelAndView = new ModelAndView("note_read");
-                modelAndView.addObject("note", noteById);
+                modelAndView.addObject("note", parseNoteContentToHtml(noteById));
                 return modelAndView;
             }
 

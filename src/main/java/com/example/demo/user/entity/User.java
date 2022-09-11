@@ -28,4 +28,8 @@ public class User {
 
     @Column(name = "password")
     private String password;
+
+    public User(UUID id) {
+        this.id = id;
+    }
 }

@@ -2,6 +2,7 @@ package com.example.demo.note;
 
 import com.example.demo.auth.CustomUserDetails;
 import com.example.demo.note.dto.NoteService;
+import com.example.demo.user.entity.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,14 +22,14 @@ public record NoteController(NoteService noteService) {
     @GetMapping("/list")
     public ModelAndView getNote(Authentication authentication) {
         ModelAndView modelAndView = new ModelAndView("note_list");
-        UUID userId = getUserIdFromAuthentication(authentication);
-        modelAndView.addObject("notes", noteService.getAllNote(userId));
+        modelAndView.addObject("notes", noteService.getAllUsersNote(getUserFromAuthentication(authentication)));
         return modelAndView;
     }
 
     @PostMapping("/create")
     public void addNote(@RequestParam Map<String, String> map, HttpServletResponse resp, Authentication authentication) {
-        map.put("userId", (getUserIdFromAuthentication(authentication)).toString());
+        UUID activeUserId = getUserFromAuthentication(authentication).getId();
+        map.put("userId", String.valueOf(activeUserId));
         noteService.createNote(map, resp);
     }
 
@@ -70,7 +71,7 @@ public record NoteController(NoteService noteService) {
         return noteService.getSharePage(req, resp);
     }
 
-    private UUID getUserIdFromAuthentication(Authentication authentication) {
-        return ((CustomUserDetails) authentication.getPrincipal()).getId();
+    private User getUserFromAuthentication(Authentication authentication) {
+        return new User(((CustomUserDetails) authentication.getPrincipal()).getId());
     }
 }
