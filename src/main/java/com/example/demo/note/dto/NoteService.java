@@ -124,7 +124,7 @@ public record NoteService(NoteRepository noteRepository,
             if (noteById.getAccess().equals(Access.PRIVATE)) {
                 resp.sendRedirect("/note/share/error");
             } else {
-                ModelAndView modelAndView = new ModelAndView("note_read");
+                ModelAndView modelAndView = new ModelAndView("share_read");
                 modelAndView.addObject("note", parseNoteContentToHtml(noteById));
                 return modelAndView;
             }

@@ -2,6 +2,7 @@ package com.example.demo.note;
 
 import com.example.demo.auth.CustomUserDetails;
 import com.example.demo.note.dto.NoteService;
+import com.example.demo.note.entity.Note;
 import com.example.demo.user.entity.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -22,7 +24,9 @@ public record NoteController(NoteService noteService) {
     @GetMapping("/list")
     public ModelAndView getNote(Authentication authentication) {
         ModelAndView modelAndView = new ModelAndView("note_list");
-        modelAndView.addObject("notes", noteService.getAllUsersNote(getUserFromAuthentication(authentication)));
+        List<Note> allUsersNote = noteService.getAllUsersNote(getUserFromAuthentication(authentication));
+        modelAndView.addObject("countNotes", allUsersNote.size());
+        modelAndView.addObject("notes", allUsersNote);
         return modelAndView;
     }
 
@@ -69,6 +73,21 @@ public record NoteController(NoteService noteService) {
     @GetMapping("/share/*")
     public ModelAndView getShareNote(HttpServletRequest req, HttpServletResponse resp) {
         return noteService.getSharePage(req, resp);
+    }
+
+    @GetMapping("/read")
+    public ModelAndView getReadPage(@RequestParam String id) {
+        try{
+            ModelAndView model = new ModelAndView("note_read");
+            model.addObject("note",
+                    noteService.parseNoteContentToHtml(
+                            noteService.getNoteById(
+                                    UUID.fromString(id))));
+            return model;
+        } catch (Exception e){
+            e.printStackTrace();
+            return new ModelAndView("any_error");
+        }
     }
 
     private User getUserFromAuthentication(Authentication authentication) {
