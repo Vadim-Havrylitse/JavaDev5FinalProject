@@ -11,12 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -36,7 +34,7 @@ public record NoteService(NoteRepository noteRepository,
         note.setName(name);
         note.setContent(content);
         note.setAccess(access);
-        note.setUserId(user.get());
+        note.setUser(user.get());
 
         if (!isValidNotes(note)){
             throw new Exception("Wrong format of name or content in Note!");
@@ -70,7 +68,7 @@ public record NoteService(NoteRepository noteRepository,
     }
 
     public List<Note> getAllUsersNote(User user) {
-        return noteRepository.findByUserIdIs(user);
+        return noteRepository.findByUserIs(user);
     }
 
     public Note parseNoteContentToHtml(Note note) {

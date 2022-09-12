@@ -15,6 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class Note {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -33,5 +34,5 @@ public class Note {
 
     @ManyToOne
     @JoinColumn(name = "user_id" , referencedColumnName = "id")
-    private User userId;
+    private User user;
 }

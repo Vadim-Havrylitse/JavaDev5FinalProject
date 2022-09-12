@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 @RequestMapping("/note")
@@ -110,7 +109,7 @@ public record NoteController(NoteService noteService, Environment env) {
             try{
                 Note note = noteService.getNoteById(UUID.fromString(noteId));
                 User userAuth = getUserFromAuthentication(authentication);
-                if (Objects.equals(note.getUserId(), userAuth)){
+                if (note.getUser().getId().equals(userAuth.getId())){
                     model.addAttribute("note", noteService.parseNoteContentToHtml(note));
                     return "note_read";
                 } else {
@@ -120,7 +119,7 @@ public record NoteController(NoteService noteService, Environment env) {
                             + noteId);
                 }
             } catch (Exception e){
-                e.printStackTrace();
+                System.err.println(e.getMessage());
                 return "any_error";
             }
         }
