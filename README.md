@@ -1,7 +1,7 @@
 # JavaDev5FinalProject
 This project is a service for creating and storing private or public notes with the ability to edit and send these notes to other users.
    
-The application can be opened using the link: [Heroku.project](https://)
+The application can be opened using the link: [Heroku.project](https://goit-final-group3.herokuapp.com)
 There is also an option to run it on the local machine by cloning it from the repository.
 You must use the following environment variables:
 server.port = ${PORT}
