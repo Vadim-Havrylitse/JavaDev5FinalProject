@@ -7,10 +7,7 @@ import com.example.demo.user.entity.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -84,14 +81,14 @@ public record NoteController(NoteService noteService) {
         return noteService.getSharePage(req, resp);
     }
 
-    @GetMapping("/read")
-    public ModelAndView getReadPage(@RequestParam String id) {
+    @GetMapping("/read/{noteId}")
+    public ModelAndView getReadPage(@PathVariable String noteId) {
         try{
             ModelAndView model = new ModelAndView("note_read");
             model.addObject("note",
                     noteService.parseNoteContentToHtml(
                             noteService.getNoteById(
-                                    UUID.fromString(id))));
+                                    UUID.fromString(noteId))));
             return model;
         } catch (Exception e){
             e.printStackTrace();
