@@ -45,7 +45,7 @@ public record NoteService(NoteRepository noteRepository,
         noteRepository.save(note);
     }
 
-    public void update(Map<String, String> map, HttpServletResponse resp) {
+    public void update(Map<String, String> map) {
         String id = map.get("id");
         String name = map.get("name");
         String content = map.get("content");
@@ -58,22 +58,11 @@ public record NoteService(NoteRepository noteRepository,
 
         noteRepository.save(note);
 
-        try {
-            resp.sendRedirect("/note/list");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
-    public void deleteById(Map<String, String> map, HttpServletResponse resp) {
+    public void deleteById(Map<String, String> map) {
         String id = map.get("id");
         noteRepository.deleteById(UUID.fromString(id));
-
-        try {
-            resp.sendRedirect("/note/list");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public Note getNoteById(UUID id) {
