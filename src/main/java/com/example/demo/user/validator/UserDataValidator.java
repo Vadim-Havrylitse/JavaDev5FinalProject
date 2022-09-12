@@ -1,7 +1,7 @@
 package com.example.demo.user.validator;
 
-import com.example.demo.user.entity.User;
 import com.example.demo.user.dto.UserService;
+import com.example.demo.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -14,10 +14,8 @@ import org.springframework.validation.Validator;
 @Component
 @RequiredArgsConstructor
 @PropertySource("classpath:validation.properties")
-public class UserDataValidator implements Validator {
-
-    private final UserService userService;
-    private final Environment env;
+public record UserDataValidator(UserService userService,
+                                Environment env) implements Validator {
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -31,7 +29,7 @@ public class UserDataValidator implements Validator {
         String errorCode = HttpStatus.BAD_REQUEST.toString();
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", errorCode, env.getProperty("NotEmpty"));
         if (user.getUsername().length() < 5 || user.getUsername().length() > 50) {
-            errors.rejectValue("username", errorCode,env.getProperty("Size.user.username"));
+            errors.rejectValue("username", errorCode, env.getProperty("Size.user.username"));
         }
         if (userService.getByUsername(user.getUsername()) != null) {
             errors.rejectValue("username", errorCode, env.getProperty("Duplicate.user.username"));
@@ -39,7 +37,7 @@ public class UserDataValidator implements Validator {
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", errorCode, env.getProperty("NotEmpty"));
         if (user.getPassword().length() < 8 || user.getPassword().length() > 100) {
-            errors.rejectValue("password", errorCode,  env.getProperty("Size.user.password"));
+            errors.rejectValue("password", errorCode, env.getProperty("Size.user.password"));
         }
     }
 }

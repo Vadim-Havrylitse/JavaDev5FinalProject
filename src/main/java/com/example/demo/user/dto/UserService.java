@@ -15,7 +15,7 @@ public record UserService(UserRepository userRepository) {
     }
 
     public User getByUsername(String username) {
-        return userRepository.findUserByUsername(username);
+        return userRepository.findByUsername(username);
     }
 
     public User getById(UUID uuid) {
