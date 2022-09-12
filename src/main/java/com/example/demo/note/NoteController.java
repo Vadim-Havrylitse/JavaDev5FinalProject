@@ -90,49 +90,49 @@ public record NoteController(NoteService noteService, Environment env) {
         }
     }
 
-        @PostMapping("/copyLink")
-        public String copyLink(@RequestParam Map<String, String> map, HttpServletRequest req) {
-            try{
-                noteService.copyLink(map, req);
-                return "redirect:/note/list";
-            } catch (Exception e){
-                e.printStackTrace();
-                return "share_error";
-            }
-
-        }
-
-        @GetMapping("/share/error")
-        public String getShareError() {
+    @PostMapping("/copyLink")
+    public String copyLink(@RequestParam Map<String, String> map, HttpServletRequest req) {
+        try{
+            noteService.copyLink(map, req);
+            return "redirect:/note/list";
+        } catch (Exception e){
+            e.printStackTrace();
             return "share_error";
         }
 
-        @GetMapping("/share/{noteId}")
-        public String getShareNote(@PathVariable String noteId, Model model) {
-            return noteService.getSharePage(noteId, model);
-        }
+    }
 
-        @GetMapping("/read/{noteId}")
-        public String getReadPage(@PathVariable String noteId, Authentication authentication, Model model) {
-            try{
-                Note note = noteService.getNoteById(UUID.fromString(noteId));
-                User userAuth = getUserFromAuthentication(authentication);
-                if (note.getUser().getId().equals(userAuth.getId())){
-                    model.addAttribute("note", noteService.parseNoteContentToHtml(note));
-                    return "note_read";
-                } else {
-                    throw new Exception("User "
-                            + userAuth.getId().toString()
-                            + " not owner of Note "
-                            + noteId);
-                }
-            } catch (Exception e){
-                System.err.println(e.getMessage());
-                return "any_error";
+    @GetMapping("/share/error")
+    public String getShareError() {
+        return "share_error";
+    }
+
+    @GetMapping("/share/{noteId}")
+    public String getShareNote(@PathVariable String noteId, Model model) {
+        return noteService.getSharePage(noteId, model);
+    }
+
+    @GetMapping("/read/{noteId}")
+    public String getReadPage(@PathVariable String noteId, Authentication authentication, Model model) {
+        try{
+            Note note = noteService.getNoteById(UUID.fromString(noteId));
+            User userAuth = getUserFromAuthentication(authentication);
+            if (note.getUser().getId().equals(userAuth.getId())){
+                model.addAttribute("note", noteService.parseNoteContentToHtml(note));
+                return "note_read";
+            } else {
+                throw new Exception("User "
+                        + userAuth.getId().toString()
+                        + " not owner of Note "
+                        + noteId);
             }
-        }
-
-        private User getUserFromAuthentication(Authentication authentication) {
-            return new User(((CustomUserDetails) authentication.getPrincipal()).getId());
+        } catch (Exception e){
+            System.err.println(e.getMessage());
+            return "any_error";
         }
     }
+
+    private User getUserFromAuthentication(Authentication authentication) {
+        return new User(((CustomUserDetails) authentication.getPrincipal()).getId());
+    }
+}

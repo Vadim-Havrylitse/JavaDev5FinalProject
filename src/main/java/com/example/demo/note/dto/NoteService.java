@@ -2,8 +2,8 @@ package com.example.demo.note.dto;
 
 import com.example.demo.note.entity.Access;
 import com.example.demo.note.entity.Note;
-import com.example.demo.user.entity.User;
 import com.example.demo.user.dto.UserRepository;
+import com.example.demo.user.entity.User;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -12,12 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
-import java.awt.*;
+import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.util.*;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public record NoteService(NoteRepository noteRepository,

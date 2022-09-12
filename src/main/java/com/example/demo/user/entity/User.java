@@ -18,9 +18,8 @@ import java.util.UUID;
 @ToString
 public class User {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @Type(type = "uuid-char")
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false, columnDefinition = "UUID default gen_random_uuid()")
     private UUID id;
 
     @Column(name = "user_name", nullable = false, unique = true)
