@@ -90,18 +90,6 @@ public record NoteController(NoteService noteService, Environment env) {
         }
     }
 
-    @PostMapping("/copyLink")
-    public String copyLink(@RequestParam Map<String, String> map, HttpServletRequest req) {
-        try{
-            noteService.copyLink(map, req);
-            return "redirect:/note/list";
-        } catch (Exception e){
-            e.printStackTrace();
-            return "share_error";
-        }
-
-    }
-
     @GetMapping("/share/error")
     public String getShareError() {
         return "share_error";

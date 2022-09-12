@@ -11,11 +11,6 @@ import org.commonmark.renderer.text.TextContentRenderer;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import javax.servlet.http.HttpServletRequest;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -84,15 +79,6 @@ public record NoteService(NoteRepository noteRepository,
         String contentHtml = renderer.render(document);
         note.setContent(contentHtml);
         return note;
-    }
-
-    public void copyLink(Map<String, String> map, HttpServletRequest req) {
-        String id = map.get("id");
-        String url = req.getRequestURL().toString().replaceAll("/note/copyLink", "/note/share/" + id);
-
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        Transferable tText = new StringSelection(url);
-        clipboard.setContents(tText, null);
     }
 
     public String getSharePage(String noteId, Model model) {
