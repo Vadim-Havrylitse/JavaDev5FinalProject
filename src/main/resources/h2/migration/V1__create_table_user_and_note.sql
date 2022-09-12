@@ -1,11 +1,11 @@
 create table users(
-    id uuid DEFAULT gen_random_uuid() PRIMARY KEY
+    id VARCHAR(255) NOT NULL DEFAULT(uuid()) primary key,
     user_name varchar(50),
     password varchar(255)
 );
 
 create table notes(
-    id uuid DEFAULT gen_random_uuid() primary key,
+    id VARCHAR(255) NOT NULL DEFAULT(uuid()) primary key,
     content varchar(10000),
     name varchar(50),
     access varchar(20),
