@@ -12,7 +12,6 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 @Component
-@RequiredArgsConstructor
 @PropertySource("classpath:validation.properties")
 public record UserDataValidator(UserService userService,
                                 Environment env) implements Validator {

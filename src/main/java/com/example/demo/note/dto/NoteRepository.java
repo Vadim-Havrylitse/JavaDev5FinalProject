@@ -14,4 +14,6 @@ public interface NoteRepository extends JpaRepository<Note, UUID> {
     List<Note> findByUserIs(User user);
 
     Note findNoteById(UUID id);
+
+    boolean existsById(UUID id);
 }

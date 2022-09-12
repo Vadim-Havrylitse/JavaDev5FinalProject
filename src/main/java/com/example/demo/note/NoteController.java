@@ -24,8 +24,13 @@ public record NoteController(NoteService noteService, Environment env) {
     @GetMapping("/list")
     public String getNote(Authentication authentication, Model model) {
         List<Note> allUsersNote = noteService.getAllUsersNote(getUserFromAuthentication(authentication));
-        model.addAttribute("countNotes", allUsersNote.size());
-        model.addAttribute("notes", allUsersNote);
+        int sizeAllUsersNote = allUsersNote.size();
+        if (sizeAllUsersNote != 0){
+            model.addAttribute("notes", noteService.parseNoteContentToSimpleView(allUsersNote));
+        } else {
+            model.addAttribute("notes", allUsersNote);
+        }
+        model.addAttribute("countNotes", sizeAllUsersNote);
         return "note_list";
     }
 
@@ -63,6 +68,9 @@ public record NoteController(NoteService noteService, Environment env) {
     public String getEditPage(@RequestParam Map<String, String> map, Model model) {
         try {
             UUID id = UUID.fromString(map.get("id"));
+            if(!noteService.existNote(id)){
+                throw new Exception("Note " + map.get("id") + " does not exist!");
+            }
             model.addAttribute("note", noteService.getNoteById(id));
             return "note_update";
         } catch (Exception e) {

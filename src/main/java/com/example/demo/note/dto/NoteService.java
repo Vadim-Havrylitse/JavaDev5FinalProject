@@ -7,6 +7,7 @@ import com.example.demo.user.dto.UserRepository;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
+import org.commonmark.renderer.text.TextContentRenderer;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -112,6 +113,24 @@ public record NoteService(NoteRepository noteRepository,
         boolean name1 = note.getName().length() >= 5;
         boolean name2 = note.getName().length() <= 100;
         return content1 && content2 && name1 && name2;
+    }
+
+    public List<Note> parseNoteContentToSimpleView(List<Note> notes){
+        notes.forEach(note -> {
+            String content = note.getContent() == null ? "" : note.getContent();
+            if (content.length() > 100){
+                content = content.substring(0, 100);
+            }
+            Parser parser = new Parser.Builder().build();
+            TextContentRenderer renderer = TextContentRenderer.builder().stripNewlines(true).build();
+            Node document = parser.parse(content);
+            note.setContent(renderer.render(document) + "...");
+        });
+        return notes;
+    }
+
+    public boolean existNote(UUID id){
+        return noteRepository.existsById(id);
     }
 
 }
