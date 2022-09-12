@@ -8,7 +8,7 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -96,44 +96,27 @@ public record NoteService(NoteRepository noteRepository,
         return note;
     }
 
-    public void copyLink(Map<String, String> map, HttpServletRequest req, HttpServletResponse resp) {
+    public void copyLink(Map<String, String> map, HttpServletRequest req) {
         String id = map.get("id");
-        String url = req.getServerName() + ":" + req.getServerPort() + "/note/share/" + id;
+        String url = req.getRequestURL().toString().replaceAll("/note/copyLink", "/note/share/" + id);
 
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         Transferable tText = new StringSelection(url);
         clipboard.setContents(tText, null);
-
-        try {
-            resp.sendRedirect("/note/list");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
-    public ModelAndView getSharePage(HttpServletRequest req, HttpServletResponse resp) {
-        String[] split = req.getRequestURI().split("/");
-        String id = split[3];
+    public String getSharePage(String noteId, Model model) {
         try {
-            Note noteById = noteRepository.findNoteById(UUID.fromString(id));
-
-            if (noteById.getAccess().equals(Access.PRIVATE)) {
-                resp.sendRedirect("/note/share/error");
+            Note note = noteRepository.findNoteById(UUID.fromString(noteId));
+            if (note.getAccess().equals(Access.PRIVATE)) {
+                return "redirect:/note/share/error";
             } else {
-                ModelAndView modelAndView = new ModelAndView("share_read");
-                modelAndView.addObject("note", parseNoteContentToHtml(noteById));
-                return modelAndView;
+                model.addAttribute("note", parseNoteContentToHtml(note));
+                return "share_read";
             }
-
-
         } catch (Exception e) {
-            try {
-                resp.sendRedirect("/note/share/error");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            return "redirect:/note/share/error";
         }
-        return new ModelAndView("share_error");
     }
 
     public boolean isValidNotes(Note note){

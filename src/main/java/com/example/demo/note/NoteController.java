@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 @RequestMapping("/note")
@@ -67,8 +68,15 @@ public record NoteController(NoteService noteService) {
     }
 
     @PostMapping("/copyLink")
-    public void copyLink(@RequestParam Map<String, String> map, HttpServletRequest req, HttpServletResponse resp) {
-        noteService.copyLink(map, req, resp);
+    public String copyLink(@RequestParam Map<String, String> map, HttpServletRequest req) {
+        try{
+            noteService.copyLink(map, req);
+            return "redirect:/note/list";
+        } catch (Exception e){
+            e.printStackTrace();
+            return "share_error";
+        }
+
     }
 
     @GetMapping("/share/error")
@@ -76,20 +84,27 @@ public record NoteController(NoteService noteService) {
         return "share_error";
     }
 
-    @GetMapping("/share/*")
-    public ModelAndView getShareNote(HttpServletRequest req, HttpServletResponse resp) {
-        return noteService.getSharePage(req, resp);
+    @GetMapping("/share/{noteId}")
+    public String getShareNote(@PathVariable String noteId, Model model) {
+        return noteService.getSharePage(noteId, model);
     }
 
     @GetMapping("/read/{noteId}")
-    public ModelAndView getReadPage(@PathVariable String noteId) {
+    public ModelAndView getReadPage(@PathVariable String noteId, Authentication authentication) {
         try{
-            ModelAndView model = new ModelAndView("note_read");
-            model.addObject("note",
-                    noteService.parseNoteContentToHtml(
-                            noteService.getNoteById(
-                                    UUID.fromString(noteId))));
-            return model;
+            Note note = noteService.getNoteById(UUID.fromString(noteId));
+            User userAuth = getUserFromAuthentication(authentication);
+            if (Objects.equals(note.getUserId(), userAuth)){
+                ModelAndView model = new ModelAndView("note_read");
+                model.addObject("note",
+                        noteService.parseNoteContentToHtml(note));
+                return model;
+            } else {
+                throw new Exception("User "
+                        + userAuth.getId().toString()
+                        + " not owner of Note "
+                        + noteId);
+            }
         } catch (Exception e){
             e.printStackTrace();
             return new ModelAndView("any_error");
