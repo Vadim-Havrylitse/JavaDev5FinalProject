@@ -54,10 +54,16 @@ public record NoteController(NoteService noteService, Environment env) {
     }
 
     @PostMapping("/delete")
-    public String deleteNote(@RequestParam Map<String, String> map, HttpServletResponse resp) {
+    public String deleteNote(@RequestParam Map<String, String> map, Authentication authentication) {
         try {
-            noteService.deleteById(map);
-            return "redirect:/note/list";
+            Note note = noteService.getNoteById(UUID.fromString(map.get("id")));
+            User userAuth = getUserFromAuthentication(authentication);
+            if (noteService.isUserOwnerNote(userAuth, note)) {
+                noteService.deleteById(map);
+                return "redirect:/note/list";
+            }else {
+                return "";
+            }
         } catch (Exception e){
             e.printStackTrace();
             return "any_error";
@@ -65,14 +71,20 @@ public record NoteController(NoteService noteService, Environment env) {
     }
 
     @GetMapping("/edit")
-    public String getEditPage(@RequestParam Map<String, String> map, Model model) {
+    public String getEditPage(@RequestParam Map<String, String> map, Model model, Authentication authentication) {
         try {
-            UUID id = UUID.fromString(map.get("id"));
-            if(!noteService.existNote(id)){
+            UUID noteId = UUID.fromString(map.get("id"));
+            if(!noteService.existNote(noteId)){
                 throw new Exception("Note " + map.get("id") + " does not exist!");
             }
-            model.addAttribute("note", noteService.getNoteById(id));
-            return "note_update";
+            Note note = noteService.getNoteById(noteId);
+            User userAuth = getUserFromAuthentication(authentication);
+            if (noteService.isUserOwnerNote(userAuth, note)){
+                model.addAttribute("note", note);
+                return "note_update";
+            } else {
+                return "";
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return "any_error";
@@ -80,10 +92,15 @@ public record NoteController(NoteService noteService, Environment env) {
     }
 
     @PostMapping("/edit")
-    public String changeNote(@RequestParam Map<String, String> map) {
+    public String changeNote(@RequestParam Map<String, String> map, Authentication authentication) {
         try {
-            noteService.update(map);
-            return "redirect:/note/list";
+            Note note = noteService.getNoteById(UUID.fromString(map.get("id")));
+            User userAuth = getUserFromAuthentication(authentication);
+            if (noteService.isUserOwnerNote(userAuth, note)){
+                noteService.update(map);
+                return "redirect:/note/list";
+            }
+            return "";
         } catch (Exception e) {
             e.printStackTrace();
             return "any_error";
@@ -105,14 +122,11 @@ public record NoteController(NoteService noteService, Environment env) {
         try{
             Note note = noteService.getNoteById(UUID.fromString(noteId));
             User userAuth = getUserFromAuthentication(authentication);
-            if (note.getUser().getId().equals(userAuth.getId())){
+            if (noteService.isUserOwnerNote(userAuth, note)){
                 model.addAttribute("note", noteService.parseNoteContentToHtml(note));
                 return "note_read";
             } else {
-                throw new Exception("User "
-                        + userAuth.getId().toString()
-                        + " not owner of Note "
-                        + noteId);
+                return "";
             }
         } catch (Exception e){
             System.err.println(e.getMessage());

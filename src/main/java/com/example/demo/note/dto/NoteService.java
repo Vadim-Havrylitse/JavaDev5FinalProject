@@ -121,4 +121,15 @@ public record NoteService(NoteRepository noteRepository,
         return noteRepository.existsById(id);
     }
 
+    public boolean isUserOwnerNote(User user, Note note) throws Exception {
+        if (note.getUser().getId().equals(user.getId())){
+            return true;
+        } else {
+            throw new Exception("User "
+                    + user.getId().toString()
+                    + " not owner of Note "
+                    + note.getId().toString());
+        }
+    }
+
 }
